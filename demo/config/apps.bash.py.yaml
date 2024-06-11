@@ -5,7 +5,6 @@ metadata:
 data:
   inputfile.txt: |
     db-config/config.ini
-    db-config/config.json
 
 ---
 apiVersion: apps/v1
@@ -43,7 +42,7 @@ spec:
             value: "dbrole"
           - name: VAULT_ADDR
             # Provide address to your VAULT server
-            value: "http://tsi-vault-tsi-vault.apps.cluster-rsh8n.rsh8n.sandbox899.opentlc.com"
+            value: "tsi-vault-tsi-vault.apps.cluster-x2xrt.x2xrt.sandbox660.opentlc.com" 
           volumeMounts:
             - name: spiffe-workload-api
               mountPath: /run/spire/sockets

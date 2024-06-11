@@ -2,11 +2,13 @@
 
 ROLE="dbrole"
 POLICY="dbpolicy"
-OIDC_URL=${OIDC_URL:-$1}
+#OIDC_URL=${OIDC_URL:-$1}
+APP_DOMAIN=${APP_DOMAIN:-1}
 ROOT_TOKEN=${ROOT_TOKEN:-$2}
 VAULT_ADDR=${VAULT_ADDR:-$3}
 export VAULT_ADDR=$VAULT_ADDR
 export ROOT_TOKEN=$ROOT_TOKEN
+export OIDC_URL=https://oidc-discovery.${APP_DOMAIN}
 # remove any previously set VAULT_TOKEN, that overrides ROOT_TOKEN in Vault client
 export VAULT_TOKEN=
 
@@ -15,9 +17,9 @@ helpme()
 {
   cat <<HELPMEHELPME
 
-Syntax: ${0} <OIDC_URL> <ROOT_TOKEN> <VAULT_ADDR>
+Syntax: ${0} <APP_DOMAINL> <ROOT_TOKEN> <VAULT_ADDR>
 Where:
-  OIDC_URL    - OIDC URL (https://) (optional, if set as env. var)
+  APP_DOMAIN  - execute (kubectl get cm -n openshift-config-managed console-public -o go-template="{{ .data.consoleURL }}" | sed 's@https://@@; s/^[^.]*\.//')
   ROOT_TOKEN  - Vault root token to setup the plugin (optional, if set as env. var)
   VAULT_ADDR  - Vault address in format http://vault.server:8200 (optional, if set as env. var)
 
@@ -78,7 +80,7 @@ EOF
       "bound_audiences": "vault",
       "bound_claims_type": "glob",
       "bound_claims": {
-        "sub":"spiffe://apps.cluster-rsh8n.rsh8n.sandbox899.opentlc.com/ns/*/sa/*"
+        "sub":"spiffe://${APP_DOMAIN}/ns/demo/sa/*"
       },
       "token_ttl": "24h",
       "token_policies": "$POLICY"
