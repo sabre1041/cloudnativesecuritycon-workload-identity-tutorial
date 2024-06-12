@@ -1,10 +1,10 @@
 kind: Service
 apiVersion: v1
 metadata:
-  name: tsi-vault
+  name: vault
 spec:
   selector:
-    app: tsi-vault
+    app: vault
   ports:
   - protocol: TCP
     port: 8200
@@ -16,21 +16,21 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   labels:
-    app: tsi-vault
-  name: tsi-vault
+    app: vault
+  name: vault
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app: tsi-vault
+      app: vault
   template:
     metadata:
       labels:
-        app: tsi-vault
-      name: tsi-vault
+        app: vault
+      name: vault
     spec:
       containers:
-        - name: tsi-vault
+        - name: vault
           image: tsidentity/ti-vault:v1.9
           imagePullPolicy: Always
           env:
