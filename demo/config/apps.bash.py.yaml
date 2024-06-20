@@ -42,7 +42,8 @@ spec:
             value: "dbrole"
           - name: VAULT_ADDR
             # Provide address to your VAULT server
-            value: "https://vault-vault.apps.cluster-x2xrt.x2xrt.sandbox660.opentlc.com" 
+            # value: "https://vault-vault.apps.cluster-x2xrt.x2xrt.sandbox660.opentlc.com"
+            value: "$VAULT_ADDR" 
           volumeMounts:
             - name: spiffe-workload-api
               mountPath: /run/spire/sockets
