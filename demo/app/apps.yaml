@@ -11,25 +11,6 @@ data:
     user=root
     passwd=testroot
 ---
-apiVersion: networking.k8s.io/v1
-kind: Ingress
-metadata:
-  name: py
-  annotations:
-    route.openshift.io/termination: edge
-spec:
-  rules:
-  - host: py.$APP_DOMAIN
-    http:
-      paths:
-      - pathType: Prefix
-        path: /
-        backend:
-          service:
-            name: apps
-            port:
-              number: 8000
----
 apiVersion: apps/v1
 kind: Deployment
 metadata:
@@ -79,3 +60,22 @@ spec:
       targetPort: 5000
 status:
   loadBalancer: {}
+---
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: py
+  annotations:
+    route.openshift.io/termination: edge
+spec:
+  rules:
+  - host: py.$APP_DOMAIN
+    http:
+      paths:
+      - pathType: Prefix
+        path: /
+        backend:
+          service:
+            name: apps
+            port:
+              number: 8000
