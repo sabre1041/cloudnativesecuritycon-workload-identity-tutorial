@@ -14,12 +14,11 @@ cd cloudnativesecuritycon-workload-identity-tutorial/demo/
 
 ## Obtain APP_DOMAIN (Ingress information)
 
-For OpenShift:
+~~For OpenShift:~~
 
-```console
-export APP_DOMAIN=$(oc get cm -n openshift-config-managed console-public -o go-template="{{ .data.consoleURL }}" | sed 's@https://@@; s/^[^.]*\.//')
-echo $APP_DOMAIN
-```
+
+> ~~export APP_DOMAIN=$(oc get cm -n openshift-config-managed console-public -o go-template="{{ .data.consoleURL }}" | sed 's@https://@@; s/^[^.]*\.//')~~
+> ~~echo $APP_DOMAIN~~
 
 For Kubernetes:
 ```console
