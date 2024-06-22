@@ -184,15 +184,57 @@ vault kv get -field=sha secret/db-config/config.ini | openssl base64 -d
 
 ### Demonstrate the Sidecar Functionality
 
-TBD
+Start the stand-alone sidecar. _Make sure the env. variables are still set_: 
+
+```console
+envsubst < secure/sidecar.yaml | kubectl apply -n demo -f -
+```
+
+Get inside the sidecar container, make sure to replace the `<pod_id>` with the correct value:
+
+```console
+kubectl -n demo get pods
+kubeclt -n demo exec -it <pod_id> -- bash
+```
+
+Once inside the container, you can make the following calls:
+
+Get this pod's SPIFFE identity in form of the [JWT](jwt.io) token: 
+
+```console
+/opt/spire/bin/spire-agent api fetch jwt -audience vault -socketPath $SOCKETFILE 
+
+# store the pod identity:
+export IDENTITY_TOKEN=$(/opt/spire/bin/spire-agent api fetch jwt -audience vault -socketPath $SOCKETFILE | sed -n '2p' | xargs)
+```
+
+Use this identity to get access token from Vault:
+
+```console
+curl --max-time 10 -s --request POST --data '{ "jwt": "'"${IDENTITY_TOKEN}"'", "role": "'"${ROLE}"'"}' "${VAULT_ADDR}"/v1/auth/jwt/login
+
+# store the Vault access token:
+VAULT_TOKEN=$(curl --max-time 10 -s --request POST --data '{ "jwt": "'"${IDENTITY_TOKEN}"'", "role": "'"${ROLE}"'"}' "${VAULT_ADDR}"/v1/auth/jwt/login | jq -r  '.auth.client_token')
+```
+
+Use the Vault access token to obtain the MySql config. Remember it is encoded, so we need to decode it:
+
+```console
+curl --max-time 10 -s -H "X-Vault-Token: $VAULT_TOKEN" $VAULT_ADDR/v1/secret/data/db-config/config.ini | jq -r ".data.data.sha" | openssl base64 -d
+```
+
+This data now can be put in a temporary file that is used by the App for establishing connection to MySql service.
 
 ### Redeploy the App with the Sidecar
+
+Now were are ready to redeploy the App. It will start a Sidecar as container init.
+Process similar to above will retrieve the MySql config and store it in the file, before starting the main App container.
 
 ```console
 envsubst < secure/apps.yaml | kubectl apply -n demo -f -
 ```
 
-Wait until the app restarts
+Wait until the App restarts
 
 ```console
 kubectl -n demo get po -w
