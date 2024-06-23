@@ -1,24 +1,19 @@
 # Workload Identity Tutorial for Cloud Native Security Con 2024
 
-## Initialize the Demo Cluster
+## 1. Initialize the Demo Cluster
+
 Create a One Node OpenShift Cluster (4.14), size m5a.2xlarge  here [https://demo.redhat.com/catalog](https://demo.redhat.com/catalog)
 
 Assuming we have the Web Terminal  already setup, let's get to the demo!
 
-## Obtain the deployment scripts for the demo
+## 2. Obtain the deployment scripts for the demo
 
 ```console
 git clone -b dev https://github.com/sabre1041/cloudnativesecuritycon-workload-identity-tutorial.git
 cd cloudnativesecuritycon-workload-identity-tutorial/demo/
 ```
 
-## Obtain APP_DOMAIN (Ingress information)
-
-~~For OpenShift:~~
-
-
-> ~~export APP_DOMAIN=$(oc get cm -n openshift-config-managed console-public -o go-template="{{ .data.consoleURL }}" | sed 's@https://@@; s/^[^.]*\.//')~~
-> ~~echo $APP_DOMAIN~~
+## 3. Obtain APP_DOMAIN (Ingress information)
 
 For Kubernetes:
 ```console
@@ -26,9 +21,9 @@ export APP_DOMAIN=apps.$(kubectl get dns cluster -o jsonpath='{ .spec.baseDomain
 echo $APP_DOMAIN
 ```
 
-## Deploy the Demo Application
+## 4. Deploy the Demo Application
 
-Create a new namespace called demo
+### 4.1 Create a demo namespace
 
 ```console
 kubectl apply -f - <<EOF
@@ -39,7 +34,7 @@ metadata:
 EOF
 ```
 
-### Deploy MySql
+### 4.2 Deploy MySql
 
 This command deploys, initializes MySql service and then populates it with the sample entries.
 
@@ -47,13 +42,14 @@ This command deploys, initializes MySql service and then populates it with the s
 kubectl -n demo apply -f app/db-node.yaml
 ```
 
-### Deploy the Application
+### 4.3 Deploy the App
 
 ```console
 envsubst < app/apps.yaml | kubectl apply -n demo -f - 
 ```
 
-Verify the app was deployed correctly.
+### 4.4 Verify the App was deployed successfully
+
 Get the URL from the command below and open in the browser:
 
 ```console
@@ -61,11 +57,11 @@ export APP=$(kubectl -n demo get ingress py -o jsonpath='{ .spec.rules[*].host }
 echo "https://$APP"
 ```
 
-## Secure the Environment
+## 5. Secure the Environment
 
-### Obtain SPIRE helm charts
+### 5.1 Obtain code for SPIRE helm charts
 
-Get the SPIRE helm-charts-harden from SPIFFE repository: 
+Get the SPIRE helm-charts-harden from SPIFFE repository:
 
 ```console
 cd
@@ -73,11 +69,13 @@ git clone -b spire-0.21.0 https://github.com/spiffe/helm-charts-hardened.git
 cd helm-charts-hardened/
 ```
 
-Deploy the SPIRE CRDs:
+### 5.2 Deploy the SPIRE CRDs
 
 ```console
 helm upgrade --install --create-namespace -n spire-mgmt spire-crds spire-crds --repo https://spiffe.github.io/helm-charts-hardened/
 ```
+
+### 5.3 Deploy SPIRE environment
 
 Assuming the env. variable `APP_DOMAIN` is still set, deploy the SPIRE to this environment:
 
@@ -87,11 +85,13 @@ helm upgrade --install --create-namespace -n spire-mgmt spire charts/spire -f ..
 
 This might take a minute or two to complete.
 
-Validate the deployment completed successfully:
+### 5.4 Validate the SPIRE deployment was successful
 
 ```console
 kubectl -n spire-server get po -w
 ```
+
+### 5.5 Validate external access
 
 Check if the external access to SPIRE services was created (Ingress):
 
@@ -99,20 +99,23 @@ Check if the external access to SPIRE services was created (Ingress):
 kubectl -n spire-server get ingress 
 ```
 
-Test access to the OIDC Discovery Service: 
+### 5.6 Test access to the OIDC Discovery Service
 
 ```console
 curl https://$(kubectl get ingress -n spire-server  spire-spiffe-oidc-discovery-provider -o jsonpath='{ .spec.rules[*].host }')/keys
 ```
 
-Since Tornjak is a UI interface for SPIRE, open the service with the browser: 
+### 5.7 Test Tornjak
+
+Since Tornjak is a UI interface for SPIRE, open the service with the browser:
 
 ```console
 echo  https://$(kubectl get ingress -n spire-server  spire-tornjak-frontend -o jsonpath='{ .spec.rules[*].host }')/entries 
 ```
 
-### Deploy Vault 
-Create a namespace called `vault` for the Vault service:
+## 6 Deploy Vault
+
+### 6.1. Create vault namespace
 
 ```console
 oc apply -f - <<EOF
@@ -124,7 +127,7 @@ metadata:
 EOF
 ```
 
-Deploy Vault service: 
+### 6.2 Deploy Vault service
 
 ```console
 cd 
@@ -133,7 +136,9 @@ cd cloudnativesecuritycon-workload-identity-tutorial/demo/
 envsubst < secure/vault.yaml | kubectl apply -n vault -f - 
 ```
 
-Once Vault deployed, set the env. variables in your local console where you have the deployment scripts: 
+### 6.3 Setup Env. Variables
+
+Once Vault deployed, set the env. variables in your local console where you have the deployment scripts:
 
 ```console
 kubectl -n vault wait --for=condition=ready --timeout=300s pod $(kubectl -n vault get po | grep vault-| awk '{print $1}')
@@ -141,6 +146,8 @@ kubectl -n vault wait --for=condition=ready --timeout=300s pod $(kubectl -n vaul
 export VAULT_ADDR=https://vault-vault.$APP_DOMAIN
 export ROOT_TOKEN=$(kubectl -n vault logs $(kubectl -n vault get po | grep vault-| awk '{print $1}') | grep Root | cut -d' ' -f3); echo "export ROOT_TOKEN=$ROOT_TOKEN"
 ```
+
+### 6.4 Test Vault
 
 Test the remote connection to vault:
 
@@ -160,13 +167,15 @@ Now test the login to Vault (vault client required):
 vault login -no-print "${ROOT_TOKEN}"
 ```
 
-Once the Vault instance is up we need to configure Vault to accept SPIRE identity tokens and setup access policies. We have a script `secure/vault-oidc.sh` to automate this process. Assuming we already setup the required env. variables (APP_DOMAIN, ROOT_TOKEN, and VAULT_ADDR; see above) simply run the script: 
+### 6.5 Configure Vault with SPIRE
+
+Once the Vault instance is up we need to configure Vault to accept SPIRE identity tokens and setup access policies. We have a script `secure/vault-oidc.sh` to automate this process. Assuming we already setup the required env. variables (APP_DOMAIN, ROOT_TOKEN, and VAULT_ADDR; see above) simply run the script:
 
 ```console
 ./secure/vault-oidc.sh
 ```
 
-### Pushing the DB credentials to Vault
+## 7 Push DB credentials to Vault
 
 Now we can push our secret files to Vault. For this example we will be using a file:
 [secure/config.ini](secure/config.ini) (for python)
@@ -182,24 +191,30 @@ vault kv put secret/db-config/config.ini sha="$SHA64"
 vault kv get -field=sha secret/db-config/config.ini | openssl base64 -d
 ```
 
-### Demonstrate the Sidecar Functionality
+## 8 Demonstrate the Sidecar Functionality
 
-Start the stand-alone sidecar. _Make sure the env. variables are still set_: 
+### 8.1 Start Stand-alone Sidecar
+
+_Make sure the env. variables are still set_
 
 ```console
 envsubst < secure/sidecar.yaml | kubectl apply -n demo -f -
 ```
 
+### 8.2 Connect to Sidecar container
+
 Get inside the sidecar container, make sure to replace the `<pod_id>` with the correct value:
 
 ```console
 kubectl -n demo get pods
-kubeclt -n demo exec -it <pod_id> -- bash
+kubectl -n demo exec -it <pod_id> -- bash
 ```
 
 Once inside the container, you can make the following calls:
 
-Get this pod's SPIFFE identity in form of the [JWT](jwt.io) token: 
+### 8.3 Get SPIFFE identity
+
+Get this pod's SPIFFE identity in form of the [JWT](jwt.io) token:
 
 ```console
 /opt/spire/bin/spire-agent api fetch jwt -audience vault -socketPath $SOCKETFILE 
@@ -207,6 +222,8 @@ Get this pod's SPIFFE identity in form of the [JWT](jwt.io) token:
 # store the pod identity:
 export IDENTITY_TOKEN=$(/opt/spire/bin/spire-agent api fetch jwt -audience vault -socketPath $SOCKETFILE | sed -n '2p' | xargs)
 ```
+
+### 8.4 Get Access Token from Vault
 
 Use this identity to get access token from Vault:
 
@@ -217,6 +234,8 @@ curl --max-time 10 -s --request POST --data '{ "jwt": "'"${IDENTITY_TOKEN}"'", "
 VAULT_TOKEN=$(curl --max-time 10 -s --request POST --data '{ "jwt": "'"${IDENTITY_TOKEN}"'", "role": "'"${ROLE}"'"}' "${VAULT_ADDR}"/v1/auth/jwt/login | jq -r  '.auth.client_token')
 ```
 
+### 8.5 Get Secret from Vault
+
 Use the Vault access token to obtain the MySql config. Remember it is encoded, so we need to decode it:
 
 ```console
@@ -225,7 +244,15 @@ curl --max-time 10 -s -H "X-Vault-Token: $VAULT_TOKEN" $VAULT_ADDR/v1/secret/dat
 
 This data now can be put in a temporary file that is used by the App for establishing connection to MySql service.
 
-### Redeploy the App with the Sidecar
+### 8.6 Exit the Sidecar
+
+We are done here, exit out of the sidecar container:
+
+```console
+exit
+```
+
+## 9. Redeploy the App with the Sidecar
 
 Now were are ready to redeploy the App. It will start a Sidecar as container init.
 Process similar to above will retrieve the MySql config and store it in the file, before starting the main App container.
@@ -239,6 +266,8 @@ Wait until the App restarts
 ```console
 kubectl -n demo get po -w
 ```
+
+## 10. Verify the Secured App
 
 Then verify the app was deployed correctly.
 Get the URL from the command below and open in the browser:

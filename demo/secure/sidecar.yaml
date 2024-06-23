@@ -1,3 +1,11 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: path-to-inputfile
+data:
+  inputfile.txt: |
+    db-config/config.ini
+---
 apiVersion: apps/v1
 kind: Deployment
 metadata:
