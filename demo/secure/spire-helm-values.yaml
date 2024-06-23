@@ -37,3 +37,6 @@ spiffe-oidc-discovery-provider:
     kubectl:
       image:
         tag: "v1.23.3"
+controllerManager:
+  ignoreNamespaces:
+    - openshift-.*
