@@ -12,21 +12,25 @@ One of the primary challenges when when working with system requiring that authe
 
 * Misconfiguration of policies to enable elevated level of access
 * Extended opportunity to exploit credentials
-* If an attacker gains access to the credential, they will have access to resources, potentially without the knowledge of the resource owner
+* If an attacker gains access to the credential, they will have access to resources, potentially without the knowledge of the resource owner.
 
 ### Workload Identity as a solution to long lived credentials
 
 In order to avoid the use of long lived credentials when communicating between different systems, a popular approach that is used today is to leverage the concept of Workload Identity by which assigns an identity to a resource (such as an application) which is used to authenticate or access remote resource. Most public cloud providers, including Amazon Web Services (AWS), Google Cloud, and Microsoft Azure implement some form of workload identity. While this provides a solution when operating in these environment, it does present challenges when working outside of these environments, including on premise, and non cloud based environments.
 
-[SPIFFE](https://spiffe.io), the Secure Production Identity Framework for Everyone, is a set of open-source standards for providing identities across infrastructures, including public and private environments. By leveraging short lived cryptographic identity documents, called SVID's, workloads can use these identity documents to authenticate to other workloads.
+[SPIFFE](https://spiffe.io), the Secure Production Identity Framework for Everyone, is a set of open-source standards designed to provide identities for services across various infrastructures, both public and private. It uses short-lived cryptographic identity documents, known as SVIDs (SPIFFE Verifiable Identity Documents), allowing workloads to authenticate to each other securely. For more detailed information on the SPIFFE ecosystem and its applications, visit the [project website](https://spiffe.io/).
 
-More information regarding the SPIFFE ecosystem and how it can be used in detail can be found on the [project website](https://spiffe.io).
+[SPIRE](https://github.com/spiffe/spire) (the SPIFFE Runtime Environment) is an implementation of SPIFFE that offers a comprehensive toolchain for identity management and attestation. It verifies running software, issues and rotates identity tokens, and serves as a central point of federation with [OIDC](https://openid.net/developers/how-connect-works/) (OpenID Connect) discovery. SPIRE is designed to be production-ready and highly scalable, with a wide range of adopters. For an extensive list of current adopters, check out the [ADOPTERS.md](https://github.com/spiffe/spire/blob/main/ADOPTERS.md) file. To learn more or to try SPIRE, visit the [SPIFFE documentation](https://spiffe.io/docs/latest/try/)
 
 ### Workload Identity in Action
 
-In order to illustrate some of the challenges that are found with the ways that systems typically communicate with each other using long lived credentials, the following set of tutorials will introduce a common two tier application architecture that exposes a frontend application that makes use of a database backend for sourcing material to perform the business requirements. Assets store within the database are protected which require that credentials be provided by any calling resource. 
+In order to illustrate some of the challenges that are found with the ways that systems typically communicate with each other using long lived credentials, the following set of tutorials will introduce a typical scenario that plays out within organizations throughout the world during the development and operational phase of applications, and the steps that can be taken to secure them.
 
-The initial architecture will mirror how many applications are typically designed which make use of long lived credentials to communicate between different components. Once the solution has been deployed, and the challenges with long lived credentials are realized, additional measures will be introduced to not only harden the posture of the application architecture, but make use of workload identity (specifically SPIFFE) to eliminate the use of long lived credentials when accessing protected resources.
+Bob is a developer looking to create a new Python application that access resources within a backend database. His initial implementation makes use of static credentials to interact with resources stored in the database so that he can quickly show the business value of his work and get feedback.
+
+Kaya, a savvy platform administrator hears about the successes of Bob's demonstration to the business, but is concerned with the security of the application. Aside from performing common platform related tasks, she also has an ear on the latest trends and approaches to securing infrastructure and application. She suggests that Bob strengthen the overall posture of his application by introducing workload identify, and specifically the SPIFFE and SPIRE ecosystem, to eliminate the use of long lived credentials when accessing protected resources. By implementing secure practices within the design and implementation of the his application, Bob will be able learn the benefits that are provided by the use of workload identify so that the pattern and technologies can be adopted by additional applications and systems throughout the organization.
+
+Let's take this journey together throughout the following tutorial exercises to be able to achieve a more secure future!
 
 ## Environment Details
 
