@@ -203,23 +203,21 @@ envsubst < secure/sidecar.yaml | kubectl apply -n demo -f -
 
 ### 8.2 Connect to Sidecar container
 
-Get inside the sidecar container, make sure to replace the `<pod_id>` with the correct value:
+Get inside the sidecar container:
 
 ```console
-kubectl -n demo get pods
-kubectl -n demo exec -it <pod_id> -- bash
+kubectl -n demo exec -it $(kubectl -n demo get po -o custom-columns=:metadata.name | grep sidecar) -- bash
 ```
 
 Once inside the container, you can make the following calls:
 
 ### 8.3 Get SPIFFE identity
 
-Get this pod's SPIFFE identity in form of the [JWT](jwt.io) token:
+Get this pod's SPIFFE identity in form of the [JWT](jwt.io) token and store the Pod identity
 
 ```console
 /opt/spire/bin/spire-agent api fetch jwt -audience vault -socketPath $SOCKETFILE 
 
-# store the pod identity:
 export IDENTITY_TOKEN=$(/opt/spire/bin/spire-agent api fetch jwt -audience vault -socketPath $SOCKETFILE | sed -n '2p' | xargs)
 ```
 
@@ -230,7 +228,6 @@ Use this identity to get access token from Vault:
 ```console
 curl --max-time 10 -s --request POST --data '{ "jwt": "'"${IDENTITY_TOKEN}"'", "role": "'"${ROLE}"'"}' "${VAULT_ADDR}"/v1/auth/jwt/login
 
-# store the Vault access token:
 VAULT_TOKEN=$(curl --max-time 10 -s --request POST --data '{ "jwt": "'"${IDENTITY_TOKEN}"'", "role": "'"${ROLE}"'"}' "${VAULT_ADDR}"/v1/auth/jwt/login | jq -r  '.auth.client_token')
 ```
 
