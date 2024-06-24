@@ -20,6 +20,12 @@ spire-server:
     kubectl:
       image:
         tag: "v1.23.3"
+  controllerManager:      
+    ignoreNamespaces:
+      - kube-system
+      - kube-public
+      - local-path-storage
+      - openshift-.*
 spire-frontend:
   logsDir: "/opt/app-root/src/.npm/_cacache/"
 spiffe-oidc-discovery-provider:
@@ -37,6 +43,3 @@ spiffe-oidc-discovery-provider:
     kubectl:
       image:
         tag: "v1.23.3"
-controllerManager:
-  ignoreNamespaces:
-    - openshift-.*

@@ -276,3 +276,17 @@ Get the URL from the command below and open in the browser:
 export APP=$(kubectl -n demo get ingress py -o jsonpath='{ .spec.rules[*].host }')
 echo "https://$APP"
 ```
+
+## 11. Cleanup
+
+Let's remove everything
+
+```console
+envsubst < secure/apps.yaml | kubectl delete -n demo -f -
+envsubst < secure/sidecar.yaml | kubectl delete -n demo -f -
+envsubst < secure/vault.yaml | kubectl delete -n vault -f -
+kubectl -n demo delete -f app/db-node.yaml
+helm --namespace spire-mgmt uninstall spire
+helm --namespace spire-mgmt uninstall spire-crds
+
+```
