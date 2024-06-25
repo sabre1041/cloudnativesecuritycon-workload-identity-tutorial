@@ -70,9 +70,6 @@ EOF
 
 # bound_subject does not allow using wildcards
 # so we use bound_claims instead
-# spiffe://mc-ztna-12-9d995c4a8c7c5f281ce13d5467ff6a94-0000.us-east.containers.appdomain.cloud/ns/demo/sa/demo
-# spiffe://apps.cluster-rsh8n.rsh8n.sandbox899.opentlc.com/ns/demo/sa/default
-# spiffe://apps.cluster-7dt7m.dynamic.redhatworkshops.io/ns/demo/sa/*
   cat > role.json <<EOF
   {
       "role_type":"jwt",
@@ -80,7 +77,7 @@ EOF
       "bound_audiences": "vault",
       "bound_claims_type": "glob",
       "bound_claims": {
-        "sub":"spiffe://${APP_DOMAIN}/ns/demo/sa/*"
+        "sub":"spiffe://${APP_DOMAIN}/ns/workload-identity-tutorial/sa/*"
       },
       "token_ttl": "24h",
       "token_policies": "$POLICY"
