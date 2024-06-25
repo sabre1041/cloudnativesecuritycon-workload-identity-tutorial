@@ -1,34 +1,34 @@
-apiVersion: v1
-kind: ConfigMap
-metadata:
-  name: path-to-inputfile
-data:
-  inputfile.txt: |
-    db-config/config.ini
+# apiVersion: v1
+# kind: ConfigMap
+# metadata:
+#   name: path-to-inputfile
+# data:
+#   inputfile.txt: |
+#     db-config/config.ini
 ---
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: sidecar
+  name: spire-debug
+  namespace: workload-identity-tutorial
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app: sidecar
+      app: spire-debug
   strategy:
     type: Recreate
   template:
     metadata:
       labels:
         identity_template: "true"
-        app: sidecar
+        app: spire-debug
     spec:
       containers:
-        - name: sidecar
+        - name: spire-debug
           securityContext:
           image: tsidentity/tornjak-example-sidecar:v0.1
           imagePullPolicy: Always
-          # use command to override the command of the image/dockerfile
           command: ["sleep"]
           args: ["1000000000"]
           env:
@@ -37,26 +37,24 @@ spec:
           - name: ROLE
             value: "dbrole"
           - name: VAULT_ADDR
-            # Provide address to your VAULT server
-            # value: "https://vault-vault.apps.cluster-x2xrt.x2xrt.sandbox660.opentlc.com"
             value: "$VAULT_ADDR" 
           volumeMounts:
             - name: spiffe-workload-api
               mountPath: /run/spire/sockets
               readOnly: true
-            - name: db-config
-              mountPath: /run/db
-            - name: mount-inputfile
-              mountPath: /usr/local/bin/inputfile.txt
-              subPath: inputfile.txt
+            # - name: db-config
+            #   mountPath: /run/db
+            # - name: mount-inputfile
+            #   mountPath: /usr/local/bin/inputfile.txt
+            #   subPath: inputfile.txt
       restartPolicy: Always
       volumes:
         - name: spiffe-workload-api
           csi:
             driver: "csi.spiffe.io"
             readOnly: true
-        - name: db-config
-          emptyDir: {}
-        - name: mount-inputfile
-          configMap:
-            name: path-to-inputfile
+        # - name: db-config
+        #   emptyDir: {}
+        # - name: mount-inputfile
+        #   configMap:
+        #     name: path-to-inputfile

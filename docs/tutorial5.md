@@ -79,7 +79,7 @@ A script is available to automate the configuration of Vault to support accessin
 
 Enable these configurations by executing the script called `vault-oidc.sh`
 
-```
+```shell
 $TUTORIAL_ROOT/cloudnativesecuritycon-workload-identity-tutorial/resources/secure/vault/vault-oidc.sh
 ```
 
@@ -89,7 +89,7 @@ Confirm the policy called `dbpolicy` has been pushed to Vault:
 vault policy read dbpolicy
 ```
 
-Next, verify JWT authentication is included in the list of enabled providers:
+Next, verify JWT authentication is included in the list of enabled providers with the Path `jwt`:
 
 ```shell
 vault auth list
