@@ -2,6 +2,7 @@ apiVersion: v1
 kind: ConfigMap
 metadata:
   name: db-config
+  namespace: workload-identity-tutorial
 data:
   config.ini: |
     [mysql]
@@ -14,19 +15,20 @@ data:
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: apps
+  name: py
+  namespace: workload-identity-tutorial
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app: apps
+      app: py
   strategy:
     type: Recreate
   template:
     metadata:
       labels:
         identity_template: "true"
-        app: apps
+        app: py
     spec:
       containers:
         - image: tsidentity/tornjak-example-python:v0.1
@@ -49,22 +51,22 @@ status: {}
 apiVersion: v1
 kind: Service
 metadata:
-  name: apps
+  name: py
+  namespace: workload-identity-tutorial
 spec:
-  type: NodePort
+  type: ClusterIP
   selector:
-    app: apps
+    app: py
   ports:
     - name: "8000"
       port: 8000
       targetPort: 5000
-status:
-  loadBalancer: {}
 ---
 apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
   name: py
+  namespace: workload-identity-tutorial
   annotations:
     route.openshift.io/termination: edge
 spec:
@@ -76,6 +78,6 @@ spec:
         path: /
         backend:
           service:
-            name: apps
+            name: py
             port:
               number: 8000

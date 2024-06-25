@@ -21,13 +21,37 @@ The [Web Terminal](https://docs.openshift.com/container-platform/4.15/web_consol
 
 The Web Terminal can be accessed from the OpenShift Web Console by clicking on the Terminal icon on the masthead of the console, next to the username. 
 
-**TODO: Insert Picture of the Terminal Icon**
+![OpenShift Web Console](images/openshift-console.png)
 
 Click on the Terminal icon to launch a session which will open a pane at the bottom of the screen
 
-**TODO: Insert Picture of Web Terminal**
+![Web Terminal](images/web-terminal.png)
 
-Proceed to the next tutorial where the application, including its architecture, will be introduced and deployed to the environment using traditional methods of authentication with long lived credentials. 
+The Web Terminal, by default, starts the session within the home directory of a user named `user` at `/home/user`. To provide a common baseline throughout the exercises, set the `TUTORIAL_ROOT` environment variable to represent the baseline location resources will be created:
+
+```shell
+export TUTORIAL_ROOT=/home/user
+```
+
+### Ingress
+
+The OpenShift environment includes an [HAProxy](https://www.haproxy.org) based Ingress Controller that can be used to access applications running within the environment. A wildcard DNS entry has been configured to resolve any address underneath a subdomain using the pattern `apps.$BASE_DOMAIN`. A CustomResourceDefinition named `DNS` contains DNS related information related to the environment.
+
+Set the `APP_DOMAIN` environment to contain the subdomain for which all eternally facing applications can be accessed:
+
+```shell
+export APP_DOMAIN=apps.$(kubectl get dns cluster -o jsonpath='{ .spec.baseDomain }')
+```
+
+Confirm the variable has been populated:
+
+```shell
+echo $APP_DOMAIN
+```
+
+A value similar to `apps.cluster-xxxxx.xxxxx.sandboxxxxx.opentlc.com` indicates the `APP_DOMAIN` variable has been set properly
+
+With an understanding of the infrastructure that will be used for the tutorial along with setting up the initial configurations to work within this environment, we can get started. Proceed to the next tutorial where the we meet Bob and Kaya and learn more about Bob's application, its architecture, and how it can be deployed within the Kubernetes environment.
 
 [Previous Tutorial - Overview](tutorial0.md)
 

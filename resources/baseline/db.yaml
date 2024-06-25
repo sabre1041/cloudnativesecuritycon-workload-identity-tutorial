@@ -2,7 +2,7 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: db
-  #namespace: demo
+  namespace: workload-identity-tutorial
 spec:
   replicas: 1
   selector:
@@ -68,9 +68,9 @@ apiVersion: v1
 kind: Service
 metadata:
   name: db
-  #namespace: demo
+  namespace: workload-identity-tutorial
 spec:
-  # type: NodePort
+  type: ClusterIP
   ports:
     - name: "3306"
       port: 3306
@@ -78,14 +78,12 @@ spec:
       protocol: TCP
   selector:
     app: db
-status:
-  loadBalancer: {}
 ---
 apiVersion: v1
 kind: ConfigMap
 metadata:
   name: mysql-initdb-config
-  #namespace: demo
+  namespace: workload-identity-tutorial
 data:
   initdb.sql: |
     CREATE DATABASE testdb;
