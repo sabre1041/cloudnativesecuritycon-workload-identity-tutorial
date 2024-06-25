@@ -100,6 +100,6 @@ Kaya is happy to see that she was able to successfully deploy Bob's application 
 
 [Previous Tutorial - Environment Access](tutorial1.md)
 
-[Next Tutorial - Identifying Security Challenges](tutorial1.md)
+[Next Tutorial - Identifying Security Challenges](tutorial3.md)
 
 [Home](../README.md)
