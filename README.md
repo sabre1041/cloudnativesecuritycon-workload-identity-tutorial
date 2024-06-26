@@ -9,3 +9,4 @@ This tutorial consists of the following exercises:
 * [Tutorial 4 - Deploying SPIRE](./docs/tutorial4.md)
 * [Tutorial 5 - Deploying Vault](./docs/tutorial5.md)
 * [Tutorial 6 - Accessing Resources Stored in Vault using SPIRE](./docs/tutorial6.md)
+* [Tutorial 7 - Securing the Python Application](./docs/tutorial7.md)

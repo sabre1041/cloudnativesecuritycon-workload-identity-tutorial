@@ -28,11 +28,8 @@ spec:
       initContainers:
         - name: sidecar
           securityContext:
-            # privileged is needed to create socket and bundle files
-            # privileged: true
           image: tsidentity/tornjak-example-sidecar:v0.1
           imagePullPolicy: Always
-          # use command to override the command of the image/dockerfile
           command: ["/usr/local/bin/run-sidecar-bash.sh"]
           args:
             - "/usr/local/bin/inputfile.txt"
@@ -42,8 +39,6 @@ spec:
           - name: ROLE
             value: "dbrole"
           - name: VAULT_ADDR
-            # Provide address to your VAULT server
-            # value: "https://vault-vault.apps.cluster-x2xrt.x2xrt.sandbox660.opentlc.com"
             value: "$VAULT_ADDR" 
           volumeMounts:
             - name: spiffe-workload-api
