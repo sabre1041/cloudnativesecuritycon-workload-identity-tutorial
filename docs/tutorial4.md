@@ -16,7 +16,7 @@ git clone -b spire-0.21.0 https://github.com/spiffe/helm-charts-hardened.git
 With the Helm charts installed locally, deploy the Kubernetes Custom Resource Definitions
 
 ```shell
-helm upgrade --install --create-namespace -n spire-mgmt spire-crds spire-crds --repo https://spiffe.github.io/helm-charts-hardened/
+helm upgrade --install --create-namespace -n spire-mgmt spire-crds $TUTORIAL_ROOT/helm-charts-hardened/charts/spire-crds
 ```
 
 A custom set of Helm values is available in a file located at `$TUTORIAL_ROOT/cloudnativesecuritycon-workload-identity-tutorial/demo/secure/spire-helm-values.yaml`. Feel free to inspect the contents to observe some of the configurations that are being applied.
