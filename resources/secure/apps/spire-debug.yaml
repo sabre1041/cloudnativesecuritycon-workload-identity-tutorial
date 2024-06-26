@@ -1,0 +1,60 @@
+# apiVersion: v1
+# kind: ConfigMap
+# metadata:
+#   name: path-to-inputfile
+# data:
+#   inputfile.txt: |
+#     db-config/config.ini
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: spire-debug
+  namespace: workload-identity-tutorial
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: spire-debug
+  strategy:
+    type: Recreate
+  template:
+    metadata:
+      labels:
+        identity_template: "true"
+        app: spire-debug
+    spec:
+      containers:
+        - name: spire-debug
+          securityContext:
+          image: tsidentity/tornjak-example-sidecar:v0.1
+          imagePullPolicy: Always
+          command: ["sleep"]
+          args: ["1000000000"]
+          env:
+          - name: SOCKETFILE
+            value: "/run/spire/sockets/spire-agent.sock"
+          - name: ROLE
+            value: "dbrole"
+          - name: VAULT_ADDR
+            value: "$VAULT_ADDR" 
+          volumeMounts:
+            - name: spiffe-workload-api
+              mountPath: /run/spire/sockets
+              readOnly: true
+            # - name: db-config
+            #   mountPath: /run/db
+            # - name: mount-inputfile
+            #   mountPath: /usr/local/bin/inputfile.txt
+            #   subPath: inputfile.txt
+      restartPolicy: Always
+      volumes:
+        - name: spiffe-workload-api
+          csi:
+            driver: "csi.spiffe.io"
+            readOnly: true
+        # - name: db-config
+        #   emptyDir: {}
+        # - name: mount-inputfile
+        #   configMap:
+        #     name: path-to-inputfile

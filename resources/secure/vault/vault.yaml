@@ -1,0 +1,70 @@
+kind: Service
+apiVersion: v1
+metadata:
+  name: vault
+  namespace: vault
+spec:
+  selector:
+    app: vault
+  ports:
+  - protocol: TCP
+    port: 8200
+    targetPort: 8200
+  type: ClusterIP
+---
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: vault
+  namespace: vault
+---
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: vault
+  namespace: vault
+  annotations:
+    route.openshift.io/termination: edge
+spec:
+  rules:
+  - host: vault-vault.$APP_DOMAIN
+    http:
+      paths:
+      - pathType: Prefix
+        path: /
+        backend:
+          service:
+            name: vault
+            port:
+              number: 8200
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app: vault
+  name: vault
+  namespace: vault
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: vault
+  template:
+    metadata:
+      labels:
+        app: vault
+      name: vault
+    spec:
+      serviceAccountName: vault
+      containers:
+        - name: vault
+          image: tsidentity/ti-vault:v1.9
+          imagePullPolicy: Always
+          env:
+          - name: SKIP_SETCAP
+            value: "true"
+          - name: SKIP_CHOWN
+            value: "true"
+          - name: HOME
+            value: "/tmp"

@@ -1,0 +1,118 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: path-to-inputfile
+  namespace: workload-identity-tutorial
+data:
+  inputfile.txt: |
+    db-config/config.ini
+---
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: py
+  namespace: workload-identity-tutorial
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: py
+  namespace: workload-identity-tutorial
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: py
+  strategy:
+    type: Recreate
+  template:
+    metadata:
+      labels:
+        identity_template: "true"
+        app: py
+    spec:
+    serviceAccountName: py
+      initContainers:
+        - name: sidecar
+          securityContext:
+          image: tsidentity/tornjak-example-sidecar:v0.1
+          imagePullPolicy: Always
+          command: ["/usr/local/bin/run-sidecar-bash.sh"]
+          args:
+            - "/usr/local/bin/inputfile.txt"
+          env:
+          - name: SOCKETFILE
+            value: "/run/spire/sockets/spire-agent.sock"
+          - name: ROLE
+            value: "dbrole"
+          - name: VAULT_ADDR
+            value: "$VAULT_ADDR" 
+          volumeMounts:
+            - name: spiffe-workload-api
+              mountPath: /run/spire/sockets
+              readOnly: true
+            - name: db-config
+              mountPath: /run/db
+            - name: mount-inputfile
+              mountPath: /usr/local/bin/inputfile.txt
+              subPath: inputfile.txt
+      containers:
+        - image: tsidentity/tornjak-example-python:v0.1
+          imagePullPolicy: Always
+          name: py
+          ports:
+            - containerPort: 5000
+          resources: {}
+          volumeMounts:
+          - mountPath: /app/config.ini
+            name: db-config
+            readOnly: true
+            subPath: config.ini
+      restartPolicy: Always
+      volumes:
+        - name: spiffe-workload-api
+          csi:
+            driver: "csi.spiffe.io"
+            readOnly: true
+        - name: db-config
+          emptyDir: {}
+        - name: mount-inputfile
+          configMap:
+            name: path-to-inputfile
+status: {}
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: py
+  namespace: workload-identity-tutorial
+spec:
+  type: ClusterIP
+  selector:
+    app: py
+  ports:
+    - name: "8000"
+      port: 8000
+      targetPort: 5000
+status:
+  loadBalancer: {}
+---
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: py
+  namespace: workload-identity-tutorial
+  annotations:
+    route.openshift.io/termination: edge
+spec:
+  rules:
+  - host: py.$APP_DOMAIN
+    http:
+      paths:
+      - pathType: Prefix
+        path: /
+        backend:
+          service:
+            name: py
+            port:
+              number: 8000
