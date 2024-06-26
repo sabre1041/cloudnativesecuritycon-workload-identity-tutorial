@@ -26,9 +26,13 @@ In order to avoid the use of long lived credentials when communicating between d
 
 In order to illustrate some of the challenges that are found with the ways that systems typically communicate with each other using long lived credentials, the following set of tutorials will introduce a typical scenario that plays out within organizations throughout the world during the development and operational phase of applications, and the steps that can be taken to secure them.
 
-Bob is a developer looking to create a new Python application that access resources within a backend database. His initial implementation makes use of static credentials to interact with resources stored in the database so that he can quickly show the business value of his work and get feedback.
+Let's introduce two personas who will help on this journey.
 
-Kaya, a savvy platform administrator hears about the successes of Bob's demonstration to the business, but is concerned with the security of the application. Aside from performing common platform related tasks, she also has an ear on the latest trends and approaches to securing infrastructure and application. She suggests that Bob strengthen the overall posture of his application by introducing workload identify, and specifically the SPIFFE and SPIRE ecosystem, to eliminate the use of long lived credentials when accessing protected resources. By implementing secure practices within the design and implementation of the his application, Bob will be able learn the benefits that are provided by the use of workload identify so that the pattern and technologies can be adopted by additional applications and systems throughout the organization.
+* **Bob is a developer** looking to create a new Python application that access resources within a backend database. His initial implementation makes use of static credentials to interact with resources stored in the database so that he can quickly show the business value of his work and get feedback.
+
+* **Kaya, a savvy platform administrator** hears about the successes of Bob's demonstration to the business, but is concerned with the security of the application. Aside from performing common platform related tasks, she also has an ear on the latest trends and approaches to securing infrastructure and application. 
+
+Kaya suggests that Bob strengthen the overall posture of his application by introducing workload identify, and specifically the SPIFFE and SPIRE ecosystem, to eliminate the use of long lived credentials when accessing protected resources. By implementing secure practices within the design and implementation of the his application, Bob will be able learn the benefits that are provided by the use of workload identify so that the pattern and technologies can be adopted by additional applications and systems throughout the organization.
 
 Let's take this journey together throughout the following tutorial exercises to be able to achieve a more secure future!
 
