@@ -131,6 +131,6 @@ Proceed to the next tutorial exercise to implement the changes necessary within 
 
 [Previous Tutorial - Deploying Vault](tutorial5.md)
 
-[Next Tutorial - Accessing Resources Stored in Vault using SPIRE](tutorial7.md)
+[Next Tutorial - Securing the Python Application](tutorial7.md)
 
 [Home](../README.md)
