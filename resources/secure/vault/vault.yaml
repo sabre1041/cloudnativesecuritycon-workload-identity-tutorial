@@ -12,6 +12,12 @@ spec:
     targetPort: 8200
   type: ClusterIP
 ---
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: vault
+  namespace: vault
+---
 apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
@@ -50,6 +56,7 @@ spec:
         app: vault
       name: vault
     spec:
+      serviceAccountName: vault
       containers:
         - name: vault
           image: tsidentity/ti-vault:v1.9
