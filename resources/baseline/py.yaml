@@ -15,7 +15,7 @@ data:
 apiVersion: v1
 kind: ServiceAccount
 metadata:
-  name: py-service-account
+  name: py
   namespace: workload-identity-tutorial
 ---
 apiVersion: apps/v1
@@ -36,7 +36,7 @@ spec:
         identity_template: "true"
         app: py
     spec:
-      serviceAccountName: py-service-account
+      serviceAccountName: py
       containers:
         - image: tsidentity/tornjak-example-python:v0.1
           imagePullPolicy: Always

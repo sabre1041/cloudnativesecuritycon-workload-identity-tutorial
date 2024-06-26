@@ -77,7 +77,7 @@ EOF
       "bound_audiences": "vault",
       "bound_claims_type": "glob",
       "bound_claims": {
-        "sub":"spiffe://${APP_DOMAIN}/ns/workload-identity-tutorial/sa/py-service-account"
+        "sub":"spiffe://${APP_DOMAIN}/ns/workload-identity-tutorial/sa/py"
       },
       "token_ttl": "24h",
       "token_policies": "$POLICY"
