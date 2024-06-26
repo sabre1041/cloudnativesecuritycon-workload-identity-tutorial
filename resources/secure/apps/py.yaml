@@ -31,7 +31,6 @@ spec:
         identity_template: "true"
         app: py
     spec:
-    serviceAccountName: py
       initContainers:
         - name: sidecar
           securityContext:
@@ -69,6 +68,7 @@ spec:
             readOnly: true
             subPath: config.ini
       restartPolicy: Always
+      serviceAccountName: py
       volumes:
         - name: spiffe-workload-api
           csi:
