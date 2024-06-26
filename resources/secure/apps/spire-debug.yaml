@@ -6,6 +6,12 @@
 #   inputfile.txt: |
 #     db-config/config.ini
 ---
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: py
+  namespace: workload-identity-tutorial
+---
 apiVersion: apps/v1
 kind: Deployment
 metadata:
@@ -24,6 +30,7 @@ spec:
         identity_template: "true"
         app: spire-debug
     spec:
+      serviceAccountName: py
       containers:
         - name: spire-debug
           securityContext:
