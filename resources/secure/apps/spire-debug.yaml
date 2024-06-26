@@ -1,16 +1,3 @@
-# apiVersion: v1
-# kind: ConfigMap
-# metadata:
-#   name: path-to-inputfile
-# data:
-#   inputfile.txt: |
-#     db-config/config.ini
----
-apiVersion: v1
-kind: ServiceAccount
-metadata:
-  name: py
-  namespace: workload-identity-tutorial
 ---
 apiVersion: apps/v1
 kind: Deployment
@@ -49,19 +36,9 @@ spec:
             - name: spiffe-workload-api
               mountPath: /run/spire/sockets
               readOnly: true
-            # - name: db-config
-            #   mountPath: /run/db
-            # - name: mount-inputfile
-            #   mountPath: /usr/local/bin/inputfile.txt
-            #   subPath: inputfile.txt
       restartPolicy: Always
       volumes:
         - name: spiffe-workload-api
           csi:
             driver: "csi.spiffe.io"
             readOnly: true
-        # - name: db-config
-        #   emptyDir: {}
-        # - name: mount-inputfile
-        #   configMap:
-        #     name: path-to-inputfile

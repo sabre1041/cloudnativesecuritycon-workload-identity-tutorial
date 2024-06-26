@@ -62,7 +62,7 @@ spire-spiffe-csi-driver   3         3         3       3            3           <
 
 One of the components that are exposed outside the cluster is an OIDC provider endpoint. Confirm the [JWKS](https://tools.ietf.org/html/rfc7517) endpoint that is used to verify the signatures that are included within JWT's is available:
 
-```
+```shell
 curl https://$(kubectl get ingress -n spire-server  spire-spiffe-oidc-discovery-provider -o jsonpath='{ .spec.rules[*].host }')/keys
 ```
 
