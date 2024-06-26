@@ -1,4 +1,4 @@
-# Tutorial 6 - Securing the Python Application
+# Tutorial 7 - Securing the Python Application
 
 The last remaining step towards achieving Kaya's vision for enabling Bob's Python application to operate securely and make use of workload identity using SPIRE is to update the application itself.
 
