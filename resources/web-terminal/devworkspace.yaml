@@ -1,0 +1,42 @@
+---
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: openshift-terminal
+---
+apiVersion: workspace.devfile.io/v1alpha2
+kind: DevWorkspace
+metadata:
+  annotations:
+    controller.devfile.io/devworkspace-source: web-terminal
+    controller.devfile.io/restricted-access: "true"
+  labels:
+    console.openshift.io/terminal: "true"
+    controller.devfile.io/creator: ""
+  generateName: terminal-
+  namespace: openshift-terminal
+spec:
+  routingClass: web-terminal
+  started: true
+  template:
+    components:
+    - name: web-terminal-tooling
+      plugin:
+        components:
+        - container:
+            image: quay.io/ablock/web-terminal-tooling-cnsc:latest
+          name: web-terminal-tooling
+        kubernetes:
+          name: web-terminal-tooling
+          namespace: openshift-operators
+    - name: web-terminal-exec
+      plugin:
+        components:
+        - container:
+            env:
+            - name: WEB_TERMINAL_IDLE_TIMEOUT
+              value: 180m
+          name: web-terminal-exec
+        kubernetes:
+          name: web-terminal-exec
+          namespace: openshift-operators
