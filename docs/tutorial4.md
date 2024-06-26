@@ -11,7 +11,6 @@ Clone the Helm charts locally to obtain the content needed to deploy SPIRE
 ```shell
 cd $TUTORIAL_ROOT
 git clone -b spire-0.21.0 https://github.com/spiffe/helm-charts-hardened.git
-cd $TUTORIAL_ROOT/helm-charts-hardened/
 ```
 
 With the Helm charts installed locally, deploy the Kubernetes Custom Resource Definitions
@@ -25,7 +24,7 @@ A custom set of Helm values is available in a file located at `$TUTORIAL_ROOT/cl
 Deploy the `spire` Helm chart with the custom Values file using the following command:
 
 ```shell
-helm upgrade --install --create-namespace -n spire-mgmt spire charts/spire -f $TUTORIAL_ROOT/cloudnativesecuritycon-workload-identity-tutorial/resources/secure/spire/spire-helm-values.yaml --set global.spire.namespaces.create=true --set global.spire.trustDomain=$APP_DOMAIN --values $TUTORIAL_ROOT/helm-charts-hardened/examples/tornjak/values.yaml --values $TUTORIAL_ROOT/helm-charts-hardened/examples/tornjak/values-ingress.yaml --render-subchart-notes --debug
+helm upgrade --install --create-namespace -n spire-mgmt spire $TUTORIAL_ROOT/helm-charts-hardened/charts/spire -f $TUTORIAL_ROOT/cloudnativesecuritycon-workload-identity-tutorial/resources/secure/spire/spire-helm-values.yaml --set global.spire.namespaces.create=true --set global.spire.trustDomain=$APP_DOMAIN --values $TUTORIAL_ROOT/helm-charts-hardened/examples/tornjak/values.yaml --values $TUTORIAL_ROOT/helm-charts-hardened/examples/tornjak/values-ingress.yaml --render-subchart-notes --debug
 ```
 
 ### Validating the SPIRE Deployment
