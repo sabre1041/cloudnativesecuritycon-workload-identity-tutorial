@@ -7,6 +7,12 @@ data:
   inputfile.txt: |
     db-config/config.ini
 ---
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: py-service-account
+  namespace: workload-identity-tutorial
+---
 apiVersion: apps/v1
 kind: Deployment
 metadata:
@@ -25,6 +31,7 @@ spec:
         identity_template: "true"
         app: py
     spec:
+    serviceAccountName: py-service-account
       initContainers:
         - name: sidecar
           securityContext:
