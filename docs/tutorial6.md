@@ -74,7 +74,7 @@ There are a number of tools that can be used to decode the contents of a JWT, on
   "exp": 1719353179,
   "iat": 1719349579,
   "iss": "https://oidc-discovery.apps.cluster-xxxxx.xxxxx.sandboxxxxx.opentlc.com",
-  "sub": "spiffe://apps.cluster-xxxxx.xxxxx.sandboxxxxx.opentlc.com/ns/workload-identity-tutorial/sa/default"
+  "sub": "spiffe://apps.cluster-xxxxx.xxxxx.sandboxxxxx.opentlc.com/ns/workload-identity-tutorial/sa/py"
 }
 ```
 
