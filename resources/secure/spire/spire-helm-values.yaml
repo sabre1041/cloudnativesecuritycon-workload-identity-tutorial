@@ -13,13 +13,12 @@ global:
       country: US
       organization: Red Hat
       commonName: common-name
+    tools:
+      kubectl:
+        tag: "v1.23.3"  
 spire-server:
   ingress:
     enabled: true
-  tools:
-    kubectl:
-      image:
-        tag: "v1.23.3"
   controllerManager:      
     ignoreNamespaces:
       - kube-system
@@ -39,7 +38,4 @@ spiffe-oidc-discovery-provider:
   ingress:
     enabled: true
     # tlsSecret: tls-cert
-  tools:
-    kubectl:
-      image:
-        tag: "v1.23.3"
+    
