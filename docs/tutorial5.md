@@ -110,7 +110,7 @@ Now that Vault has been deployed and configured, Kaya recommends transitioning f
 First, obtain the configuration file containing the database credentials from the ConfigMap called `db-config`:
 
 ```shell
-oc get cm -n workload-identity-tutorial db-config -o jsonpath='{ .data.config\.ini }' > $TUTORIAL_ROOT/cloudnativesecuritycon-workload-identity-tutorial/resources/secure/vault/config.ini
+kubectl get cm -n workload-identity-tutorial db-config -o jsonpath='{ .data.config\.ini }' > $TUTORIAL_ROOT/cloudnativesecuritycon-workload-identity-tutorial/resources/secure/vault/config.ini
 ```
 
 Vault accepts configurations that are stored in JSON format and since this configuration resource is in `.ini` format instead, the contents can be encoded in base64 format and stored within Vault.
