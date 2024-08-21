@@ -32,7 +32,7 @@ spec:
               value: testroot
             - name: MYSQL_USER
               value: newroot
-          image: mysql:5.7
+          image: mysql:8.0
           name: mysql57demo
           ports:
             - containerPort: 3306

@@ -1,0 +1,36 @@
+global:
+  spire:
+    recommendations:
+      enabled: true
+    namespaces:
+      create: true
+    ingressControllerType: "ingress-nginx" # If not openshift, and want to expose services, set to a supported option [ingress-nginx]
+    # Update these
+    clusterName: demo-1
+    # trustDomain:
+    caSubject:
+      country: US
+      organization: Red Hat
+      commonName: common-name
+spire-server:
+  ingress:
+    enabled: true
+  controllerManager:      
+    ignoreNamespaces:
+      - kube-system
+      - kube-public
+      - local-path-storage
+spire-frontend:
+  logsDir: "/opt/app-root/src/.npm/_cacache/"
+spiffe-oidc-discovery-provider:
+  enabled: true
+  # SPIRE Root CA is currently set to rotate every 2h
+  # this means the thumbprint for OIDC needs to be updated frequently
+  # the quick fix is to disable the TLS on SPIRE:
+  tls:
+    spire:
+      enabled: false
+  ingress:
+    enabled: true
+    # tlsSecret: tls-cert
+    

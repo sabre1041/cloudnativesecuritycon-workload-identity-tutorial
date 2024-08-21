@@ -38,10 +38,16 @@ Let's take this journey together throughout the following tutorial exercises to 
 
 ## Environment Details
 
-This tutorial makes use of a [Kubernetes](https://kubernetes.io) environment, based on [OpenShift](https://www.redhat.com/en/technologies/cloud-computing/openshift), to be able to demonstrate how workload identity can be achieved when working across cloud environments. While OpenShift and Kubernetes is being used from an implementation perspective, the concepts are not dependant solely on this type of architecture.
+This tutorial makes use of a [Kubernetes](https://kubernetes.io) environment. For the live demo, we have made available One Node [OpenShift](https://www.redhat.com/en/technologies/cloud-computing/openshift) clusters for each participant to access and work through the various exercises. This tutorial is not dependent on OpenShift. We have now made available the instructions to set up a [Kind](https://kind.sigs.k8s.io/) cluster and demonstrate how workload identity can be achieved. 
+
+While Kubernetes is being used from an implementation perspective, the solutions here are not dependent on Kubernetes. 
 
 Each participant will have access to a cluster of their own to work though the various exercises of this tutorial. Additional information including how to gain access to the environment can be found in the next section, Accessing the environment.
 
-[Next Tutorial - Environment Access](tutorial1.md)
+For the live demo, additional information about accessing and interacting with the environment can be found in the first link below. To run the demo locally on Kind, the instructions for setting up the environment are in the second link below
+
+[Next Tutorial - Environment Access for Live Tutorial](tutorial1a.md)
+
+[Next Tutorial - Environment Setup on Kind](tutorial1b.md)
 
 [Home](../README.md)

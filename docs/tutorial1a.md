@@ -33,6 +33,21 @@ The Web Terminal, by default, starts the session within the home directory of a 
 export TUTORIAL_ROOT=/home/user
 ```
 
+## Obtain the Project Resources
+
+Bob's application and the remainder of the resources associated with the tutorial are located in the accompanying git repository. Ensure that you are in the directory represented by the `TUTORIAL_ROOT` environment and clone the repository to this location:
+
+```shell
+cd $TUTORIAL_ROOT
+git clone https://github.com/sabre1041/cloudnativesecuritycon-workload-identity-tutorial
+```
+
+Now, change into the project repository directory:
+
+```shell
+cd $TUTORIAL_ROOT/cloudnativesecuritycon-workload-identity-tutorial
+```
+
 ### Ingress
 
 The OpenShift environment includes an [HAProxy](https://www.haproxy.org) based Ingress Controller that can be used to access applications running within the environment. A wildcard DNS entry has been configured to resolve any address underneath a subdomain using the pattern `apps.$BASE_DOMAIN`. A CustomResourceDefinition named `DNS` contains DNS related information related to the environment.

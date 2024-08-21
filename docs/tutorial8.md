@@ -12,6 +12,16 @@ By leveraging SPIFFE and SPIRE, we demonstrated how to secure an application by 
 
 We hope this tutorial provides you with a pattern example that can significantly harden the security posture of your deployed application.
 
+## Cleanup for Kind
+
+If you created your own Kind cluster, here are the steps to clean the resources:
+
+```shell
+KIND_EXPERIMENTAL_PROVIDER=podman kind delete cluster
+podman machine stop
+podman machine rm
+```
+
 ## Links
 
 ### Resources and Relevant Technologies

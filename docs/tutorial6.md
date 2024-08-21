@@ -36,11 +36,23 @@ Verify that the `spire-debug` pod is up and running:
 kubectl -n workload-identity-tutorial get pod -l=app=spire-debug
 ```
 
+> **Kind:**
+> Copy the certificate into the pod so the pod can curl. 
+> ```shell
+> kubectl -n workload-identity-tutorial cp wildcard-tls.crt $(kubectl -n workload-identity-tutorial get po | grep debug-| awk '{print $1}'):wildcard-tls.crt
+> ```
+
 Obtain a remote shell in the pod created by the `spire-debug` Deployment using the following command:
 
 ```shell
 kubectl -n workload-identity-tutorial exec -it $(kubectl -n workload-identity-tutorial get pod -l=app=spire-debug -o jsonpath='{ .items[*].metadata.name}') -- bash
 ```
+
+> **Kind:**
+> We will be running curl commands. Because we are using self-signed certificate, we must put set the default `SSL_CERT_FILE`:
+> ```shell
+> export SSL_CERT_FILE=wildcard-tls.crt
+> ```
 
 Once inside the container, A SPIFFE identity can be obtained using the `spire-agent` CLI which is included within the container. The location SPIRE socket within the container is exposed via the `SOCKETFILE` environment variable.
 

@@ -2,21 +2,6 @@
 
 Kaya has thoughts about how to harden Bob's application, but she first would like to see the application firsthand within one of her Kubernetes clusters (the same cluster you just accessed in the prior tutorial). During this tutorial, obtain the resources associated with Bob's application and deploy the application within the Kubernetes environment. 
 
-## Obtain the Project Resources
-
-Bob's application and the remainder of the resources associated with the tutorial are located in the accompanying git repository. Ensure that you are in the directory represented by the `TUTORIAL_ROOT` environment and clone the repository to this location:
-
-```shell
-cd $TUTORIAL_ROOT
-git clone https://github.com/sabre1041/cloudnativesecuritycon-workload-identity-tutorial
-```
-
-Now, change into the project repository directory:
-
-```shell
-cd $TUTORIAL_ROOT/cloudnativesecuritycon-workload-identity-tutorial
-```
-
 ## Deploy the Application
 
 With the git repository cloned within the Web Terminal environment, the resources associated with Bob's application is contained within the `resources/baseline` directory and consists of the following:
@@ -94,11 +79,16 @@ echo https://$(kubectl -n workload-identity-tutorial get ingress py -o jsonpath=
 
 Open a web browser and navigate to the URL provided as an output from the previous command. A result similar to the following containing a table populated with movie titles indicates the deployment was successful.
 
+> [!NOTE]
+> You may need to "Accept Risk and Continue" if you are working with the local Kind deployment, as we are using a self-signed certificate. 
+
 ![Python Application](images/baseline-app.png)
 
 Kaya is happy to see that she was able to successfully deploy Bob's application to the Kubernetes cluster. In the next tutorial exercise, Kaya will work with Bob to identify the security challenges currently present within the application and an approach to harden the posture of the application as it relates to security moving forward.
 
-[Previous Tutorial - Environment Access](tutorial1.md)
+[Previous Tutorial - Environment Access for Live Tutorial](tutorial1a.md)
+
+[Previous Tutorial - Environment Setup on Kind](tutorial1b.md)
 
 [Next Tutorial - Identifying Security Challenges](tutorial3.md)
 

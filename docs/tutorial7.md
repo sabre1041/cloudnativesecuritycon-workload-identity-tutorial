@@ -13,7 +13,7 @@ kubectl delete configmap -n workload-identity-tutorial db-config
 Now, apply the updated set of Python application manifests to the cluster:
 
 ```shell
-envsubst < $TUTORIAL_ROOT/cloudnativesecuritycon-workload-identity-tutorial/resources/secure/apps/py.yaml | kubectl apply -f -
+envsubst < $TUTORIAL_ROOT/cloudnativesecuritycon-workload-identity-tutorial/resources/secure/apps/kind-py.yaml | kubectl apply -f -
 ```
 
 The updated `Deployment` will trigger a new version of the Python application to be created. It will first terminate the existing version and create a new Pod with the updated configuration. Confirm the new pod was created and has a status of `Running`:
