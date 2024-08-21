@@ -36,6 +36,12 @@ Verify that the `spire-debug` pod is up and running:
 kubectl -n workload-identity-tutorial get pod -l=app=spire-debug
 ```
 
+Copy the certificate into the pod: 
+
+```shell
+kubectl cp [TODO]
+```
+
 Obtain a remote shell in the pod created by the `spire-debug` Deployment using the following command:
 
 ```shell

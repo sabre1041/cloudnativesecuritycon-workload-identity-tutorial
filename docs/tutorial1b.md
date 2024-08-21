@@ -83,6 +83,7 @@ We will also use a local self-signed certificate to secure the TLS connections o
 openssl req -x509 -nodes -days 365 -newkey rsa:2048 -keyout $TUTORIAL_ROOT/wildcard-tls.key -out $TUTORIAL_ROOT/wildcard-tls.crt -subj "/CN=*.$APP_DOMAIN/O=Red Hat" -addext "subjectAltName=DNS:*.$APP_DOMAIN"
 kubectl create secret tls wildcard-tls-secret --key $TUTORIAL_ROOT/wildcard-tls.key --cert $TUTORIAL_ROOT/wildcard-tls.crt
 kubectl apply -f $TUTORIAL_ROOT/cloudnativesecuritycon-workload-identity-tutorial/resources/cluster/kind-ingress-deployment.yaml
+kubectl -n ingress-nginx wait --for=condition=ready --timeout=300s pod $(kubectl -n ingress-nginx get po | grep vault-| awk '{print $1}')
 ```
 
 With an understanding of the infrastructure that will be used for the tutorial along with setting up the initial configurations to work within this environment, we can get started. Proceed to the next tutorial where the we meet Bob and Kaya and learn more about Bob's application, its architecture, and how it can be deployed within the Kubernetes environment.
