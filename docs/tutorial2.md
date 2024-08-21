@@ -87,6 +87,7 @@ Open a web browser and navigate to the URL provided as an output from the previo
 Kaya is happy to see that she was able to successfully deploy Bob's application to the Kubernetes cluster. In the next tutorial exercise, Kaya will work with Bob to identify the security challenges currently present within the application and an approach to harden the posture of the application as it relates to security moving forward.
 
 [Previous Tutorial - Environment Access for Live Tutorial](tutorial1a.md)
+
 [Previous Tutorial - Environment Setup on Kind](tutorial1b.md)
 
 [Next Tutorial - Identifying Security Challenges](tutorial3.md)
