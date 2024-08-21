@@ -39,7 +39,7 @@ kubectl -n workload-identity-tutorial get pod -l=app=spire-debug
 Copy the certificate into the pod: 
 
 ```shell
-kubectl cp [TODO]
+kubectl -n workload-identity-tutorial cp wildcard-tls.crt $(kubectl -n workload-identity-tutorial get po | grep debug-| awk '{print $1}'):wildcard-tls.crt
 ```
 
 Obtain a remote shell in the pod created by the `spire-debug` Deployment using the following command:
