@@ -23,6 +23,8 @@ The Web Terminal can be accessed from the OpenShift Web Console by clicking on t
 
 ![OpenShift Web Console](images/openshift-console.png)
 
+NOTE: If the Terminal Icon is not present or you are not running the workshop in a provided environment that has been provisioned to support the workshop, the Web Terminal Operator can be installed using [this](../resources/web-terminal/operator.yaml) `Subscription` manifest and the resources found [here](../resources/web-terminal/devworkspace.yaml). 
+
 Click on the Terminal icon to launch a session which will open a pane at the bottom of the screen
 
 ![Web Terminal](images/web-terminal.png)
