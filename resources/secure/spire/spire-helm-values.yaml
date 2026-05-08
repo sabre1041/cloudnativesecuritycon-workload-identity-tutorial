@@ -15,8 +15,9 @@ global:
       commonName: common-name
     tools:
       kubectl:
-        tag: "v1.23.3"  
+        tag: "v1.36.0"
 spire-server:
+  defaultJwtSvidTTL: 5m
   ingress:
     enabled: true
   controllerManager:      
