@@ -12,6 +12,22 @@ By leveraging SPIFFE and SPIRE, we demonstrated how to secure an application by 
 
 We hope this tutorial provides you with a pattern example that can significantly harden the security posture of your deployed application.
 
+## Cleanup 
+
+To remove all the components installed during the workshop, execute the following commands:
+
+```shell
+envsubst < $TUTORIAL_ROOT/cloudnativesecuritycon-workload-identity-tutorial/resources/secure/apps/py.yaml | kubectl delete -f -
+envsubst < $TUTORIAL_ROOT/cloudnativesecuritycon-workload-identity-tutorial/resources/secure/vault/vault.yaml | kubectl delete -f -  
+envsubst < $TUTORIAL_ROOT/cloudnativesecuritycon-workload-identity-tutorial/resources/baseline/py.yaml | kubectl delete -f - 
+kubectl delete -f $TUTORIAL_ROOT/cloudnativesecuritycon-workload-identity-tutorial/resources/baseline/db.yaml
+
+
+helm --namespace spire-mgmt uninstall spire
+helm --namespace spire-mgmt uninstall spire-crds
+kubectl delete ns spire-server spire-system spire-mgmt vault workload-identity-tutorial 
+```
+
 ## Links
 
 ### Resources and Relevant Technologies
