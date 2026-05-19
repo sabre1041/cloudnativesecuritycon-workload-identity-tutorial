@@ -91,7 +91,7 @@ The subject field represents the workload specifically and can be broken down in
 * `spiffe://` - SPIFFE protocol
 * `apps.cluster-xxxxx.xxxxx.sandboxxxxx.opentlc.com` - The SPIFFE [Trust Domain](https://spiffe.io/docs/latest/spiffe-about/spiffe-concepts) representing the Kubernetes cluster (`APP_DOMAIN`)
 * `ns/workload-identity-tutorial` - Kubernetes namespace
-* `sa/default` - Service account associated with the workload
+* `sa/py` - Service account associated with the workload
 
 With an understanding of how JWT's cant be obtained from SPIRE and their composition, use the JWT stored in the `IDENTITY_TOKEN` environment variable to obtain an access token from Vault:
 
