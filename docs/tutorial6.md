@@ -50,7 +50,7 @@ Execute the following command to obtain a JWT using the `spire-agent` CLI
 /opt/spire/bin/spire-agent api fetch jwt -audience vault -socketPath $SOCKETFILE 
 ```
 
-Several values provided within the response. To extract just the JWT, execute teh followin command to store the result in the environment `IDENTITY_TOKEN` environment variable.
+Several values provided within the response. To extract just the JWT, execute teh following command to store the result in the environment `IDENTITY_TOKEN` environment variable.
 
 ```shell
 export IDENTITY_TOKEN=$(/opt/spire/bin/spire-agent api fetch jwt -audience vault -socketPath $SOCKETFILE | sed -n '2p' | xargs)

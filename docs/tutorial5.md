@@ -31,7 +31,7 @@ export VAULT_ADDR=https://vault-vault.$APP_DOMAIN
 Confirm that the Vault health endpoint returns a successful response
 
 ```
-curl  $VAULT_ADDR/v1/sys/health | jq
+curl -s $VAULT_ADDR/v1/sys/health | jq
 ```
 
 A response similar to the following indicates Vault is running and healthy

@@ -2,13 +2,12 @@
 
 ROLE="dbrole"
 POLICY="dbpolicy"
-#OIDC_URL=${OIDC_URL:-$1}
+OIDC_URL=${OIDC_URL:-$1}
 APP_DOMAIN=${APP_DOMAIN:-1}
 ROOT_TOKEN=${ROOT_TOKEN:-$2}
 VAULT_ADDR=${VAULT_ADDR:-$3}
 export VAULT_ADDR=$VAULT_ADDR
 export ROOT_TOKEN=$ROOT_TOKEN
-export OIDC_URL=https://oidc-discovery.${APP_DOMAIN}
 # remove any previously set VAULT_TOKEN, that overrides ROOT_TOKEN in Vault client
 export VAULT_TOKEN=
 
